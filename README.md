@@ -15,19 +15,41 @@ Check the repository [Wiki](https://github.com/mateusoliveira43/python-cli-scrip
 
 # Example of use
 
-In the scripts folder, the `example` Python package and `run_example` Python module are example of use of the template.
+The `example` folder and the `run_example.py` file are an example of use of the template.
 
 To run the example, run
 ```
-[python|python3] scripts/run_example.py
-[python|python3] scripts/run_example.py -h
-[python|python3] scripts/run_example.py --help
+[python|python3] ./run_example.py
+[python|python3] ./run_example.py -h
+[python|python3] ./run_example.py --help
 ```
 to display the example script's help message. Run the script with Python 3 command is optional.
 
+# Docker
+
+To connect to project's Docker container shell, run
+```
+docker/run.sh
+```
+It is not needed to have virtual environment active in the container.
+
+To exit the container's shell, run `CTRL+D` or `exit`.
+
+To run Dockerfile linter, run
+```
+docker/lint.sh
+```
+
+To remove the project's containers, images, volumes and networks, run
+```
+docker/down.sh
+```
+
+To change Docker configuration, change the variables in `.env` file.
+
 # Quality
 
-To run the template quality measures, it is needed to install its development requirements. To install then, run
+To run the template quality measures, it is needed to install its development requirements and have virtual environment active. To install then in a virtual environment, run
 ```
 virtualenv .venv
 source .venv/bin/activate
@@ -35,9 +57,10 @@ pip install -r requirements/dev.txt
 ```
 or
 ```
-poetry install --no-root
+poetry install
 poetry shell
 ```
+To deactivate virtual environment, run `CTRL+D` or `exit`.
 
 The quality measures of the template are reproduced by the continuos integration (CI) pipeline of the project. CI configuration in `.github/workflows/ci.yml` file.
 
@@ -70,7 +93,7 @@ Python type checker configuration in `pyproject.toml` file.
 
 To run Python linter, run
 ```
-prospector .
+prospector
 ```
 
 Python linter configuration in `.prospector.yaml` file.
@@ -110,7 +133,8 @@ File format configuration in `.editorconfig` file.
 
 To check common security issues in Python code, run
 ```
-bandit --recursive scripts
+bandit --recursive cli
+bandit --recursive example
 ```
 
 To check known security vulnerabilities in Python dependencies, run
@@ -121,29 +145,6 @@ safety check --file requirements/dev.txt --full-report
 ## SonarCloud Code Analysis
 
 [SonarCloud](https://sonarcloud.io/) analyzes the source code of the project through the CI pipeline.
-
-# Docker
-
-To run a single project's command in Docker, run
-```
-docker/run.sh <COMMAND>
-```
-for example, `docker/run.sh .venv/bin/pytest` or `docker/run.sh poetry run pytest`.
-
-To run multiple project's commands in Docker, run
-```
-docker/run.sh sh
-```
-and run the commands in the container's shell, for example `source .venv/bin/activate` or `poetry shell`.
-
-To exit the container's shell, run `CTRL+D` or `exit`.
-
-To remove the project's containers, images, volumes and networks, run
-```
-docker/down.sh
-```
-
-To change Docker configuration, change the variables in `.env` file.
 
 # Pre-commit
 

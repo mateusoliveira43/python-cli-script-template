@@ -10,7 +10,7 @@ import pytest
 from example.example_cli import COMMANDS
 from tests import ABSOLUTE_PATH
 
-EXAMPLE_FILE = (ABSOLUTE_PATH / "example/example_cli.py").as_posix()
+EXAMPLE_FILE = (ABSOLUTE_PATH / "run_example.py").as_posix()
 ARGUMENTS = {
     "help": ["-h", "--help"],
     "version": ["-v", "--version"],
@@ -18,7 +18,7 @@ ARGUMENTS = {
 }
 INVALID_FLAGS = ["-k", "--invalid"]
 
-USAGE = f"Usage:\n  [python|python3] {EXAMPLE_FILE}"
+USAGE = "Usage:\n  [python|python3] "
 OPTIONS = ["[-h]", "[-v]", "[-o]", "[COMMAND]", "..."]
 OPTIONS_COMMAND = ["[-h]", "(-t str | -n int)", "..."]
 

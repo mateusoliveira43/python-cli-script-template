@@ -68,8 +68,22 @@ jobs:
 
       - name: Security vulnerability scan
         run: |
-          bandit --recursive scripts
+          bandit --recursive cli
+          bandit --recursive example
           safety check --file requirements/dev.txt --full-report
+
+      - name: Usage example
+        run: |
+          ./run_example.py --help
+          ./run_example.py command1 --help
+
+  docker-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hadolint/hadolint-action@v2.0.0
+        with:
+          dockerfile: docker/Dockerfile
 
   sonarcloud:
     needs: build

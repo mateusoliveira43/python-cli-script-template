@@ -15,19 +15,41 @@ Confira a [Wiki](https://github.com/mateusoliveira43/python-cli-script-template/
 
 # Exemplo de uso
 
-Na pasta script, o pacote Python `example` e o módulo Python `run_example` são exemplos de uso do modelo.
+A pasta `example` e o arquivo `run_example.py` são um exemplo de uso do modelo.
 
 Para rodar o exemplo, execute
 ```
-[python|python3] scripts/run_example.py
-[python|python3] scripts/run_example.py -h
-[python|python3] scripts/run_example.py --help
+[python|python3] ./run_example.py
+[python|python3] ./run_example.py -h
+[python|python3] ./run_example.py --help
 ```
 para mostrar a mensagem de ajuda do script de exemplo. Executar o script com o comando de Python 3 é opcional.
 
+# Docker
+
+Para se conectar na shell do container Docker do projeto, execute
+```
+docker/run.sh
+```
+Não é necessário ter um ambiente virtual ativo no container.
+
+Para sair da shell do container, execute `CTRL+D` ou `exit`.
+
+Para rodar o linter de arquivos Dockerfile, execute
+```
+docker/lint.sh
+```
+
+Para remover os containers, imagens, volumes e redes do projeto, execute
+```
+docker/down.sh
+```
+
+Para mudar a configuração do Docker, altere as variáveis no arquivo `.env`.
+
 # Qualidade
 
-Para rodar as métricas de qualidade do modelo, é necessário instalar seus requisitos de desenvolvimento. Para instalá-los, execute
+Para rodar as métricas de qualidade do modelo, é necessário instalar seus requisitos de desenvolvimento e ter um ambiente virtual ativo. Para instalá-los em um ambiente virtual, execute
 ```
 virtualenv .venv
 source .venv/bin/activate
@@ -38,6 +60,7 @@ ou
 poetry install --no-root
 poetry shell
 ```
+Para desativar o ambiente virtual, execute `CTRL+D` ou `exit`.
 
 As métricas de qualidade do modelo são reproduzidas pelas etapas de integração contínua do projeto. Configurações das etapas de integração contínua descritas no arquivo `.github/workflows/ci.yml`.
 
@@ -52,11 +75,25 @@ Para ver o relatório html, confira `tests/coverage-results/htmlcov/index.html`.
 
 Configurações dos testes e relatório de cobertura descritas no arquivo `pyproject.toml`.
 
+## Checagem de tipo
+
+Para gerar arquivos de tipo do python, execute
+```
+stubgen --verbose --package cli --output .
+```
+
+Para rodar o checador de tipo do Python, execute
+```
+mypy .
+```
+
+Configurações do checador de tipo do Python descritas no arquivo `pyproject.toml`.
+
 ## Linter
 
 Para rodar o linter de código Python, execute
 ```
-prospector .
+prospector
 ```
 
 Configurações do linter de Python descritas no arquivo `.prospector.yaml`.
@@ -96,7 +133,8 @@ Configurações do formato dos arquivos descritas no arquivo `.editorconfig`.
 
 Para checar problemas de segurança comuns no código Python, execute
 ```
-bandit --recursive scripts
+bandit --recursive cli
+bandit --recursive example
 ```
 
 Para checar vulnerabilidades de segurança conhecidas nas dependências Python, execute
@@ -108,43 +146,20 @@ safety check --file requirements/dev.txt --full-report
 
 [SonarCloud](https://sonarcloud.io/) analisa o código fonte do repositório através das etapas de integração contínua.
 
-# Docker
-
-Para rodar um único comando do projeto no Docker, execute
-```
-docker/run.sh <COMMAND>
-```
-Por exemplo, `docker/run.sh .venv/bin/pytest` ou `docker/run.sh poetry run pytest`.
-
-Para rodar múltiplos comandos do projeto no Docker, execute
-```
-docker/run.sh sh
-```
-e execute os comandos na shell do container, por exemplo `source .venv/bin/activate` ou `poetry shell`.
-
-Para sair da shell do container, execute `CTRL+D` ou `exit`.
-
-Para remover os containers, imagens, volumes e redes do projeto, execute
-```
-docker/down.sh
-```
-
-Para mudar a configuração do Docker, altere as variáveis no arquivo `.env`.
-
 # Pre-commit
 
 Para configurar o pre-commit automaticamente ao clonar o repositório, execute
 ```
 pip install pre-commit
 git config --global init.templateDir ~/.git-template
-pre-commit init-templatedir --hook-type commit-msg ~/.git-template
+pre-commit init-templatedir --hook-type commit-msg --hook-type pre-commit ~/.git-template
 ```
 Precisa ser instalado de forma global. Mais informações em https://pre-commit.com/#automatically-enabling-pre-commit-on-repositories
 
 Para configurar o pre-commit localmente, execute
 ```
 pip install pre-commit
-pre-commit install --hook-type commit-msg
+pre-commit install --hook-type commit-msg --hook-type pre-commit
 ```
 com seu ambiente virtual ativo.
 
